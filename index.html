@@ -1,0 +1,41 @@
+<div id="root"></div>
+<script>
+const root = document.getElementById('root')
+const todos = [
+  {text: 'Prepare for workshop', done: false}
+]
+
+const add = (text) => {
+  todos.push({text, done: false})
+  render(todos)
+}
+
+const change = (index) => {
+  console.log('>>', index)
+  todos[index].done = !todos[index].done
+  render(todos)
+}
+
+const render = (todos) => {
+  root.innerHTML = `
+    <form onsubmit="add(this.todo.value); return false">
+      <input name="todo" />
+    <form>
+    <ul>
+      ${todos.map((todo, index) => `
+        <li>
+          <input
+            type="checkbox"
+            ${todo.done && "checked"}
+            onchange="change(${index})" />
+          ${todo.done
+            ? `<s>${todo.text}</s>`
+            : todo.text}
+        </li>
+      `).join('')}
+    </ul>
+  `
+}
+
+render(todos)
+</script>

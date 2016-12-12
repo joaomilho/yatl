@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <title>YATL</title>
+    <link rel="stylesheet" media="all" href="./style.css" />
+
+  </head>
+  <body>
+<div id="root"></div>
+<script>
+const root = document.getElementById('root')
+const todos = [
+  {title: 'Prepare for workshop', summary: "Something", done: false}
+]
+
+const add = (form) => {
+  todos.push({
+    title: form.title.value,
+    summary: form.summary.value,
+    done: false
+  })
+  render(todos)
+}
+
+const change = (index) => {
+  console.log('>>', index)
+  todos[index].done = !todos[index].done
+  render(todos)
+}
+
+const pluralize = (count) => 
+  count === 1
+    ? 'There is 1 thing to do'
+    : `There are ${count} things to do`
+
+const tdb = (todos) =>
+  todos.filter((todo) => !todo.done)
+
+const done = (todos) =>
+  todos.filter((todo) => todo.done)
+
+const render = (todos) => {
+  root.innerHTML = `
+    <form onsubmit="add(this); return false">
+      <input 
+        autocomplete="off"
+        name="title"
+        placeholder="What needs to be done?" />
+      <textarea rows="4" name="summary" placeholder="Further info here"></textarea>
+      <button>Add</button>
+    </form>
+    <h3 class="count">
+      ${pluralize(todos.filter((todo) => !todo.done).length)}
+  ${done
+      
+      }
+      <a href="#">Show only todos</a>
+      <a href="#">Show all</a>
+    </h3>
+    <ul class="todo-list">
+      ${todos.map((todo, index) => `
+        <li>
+          <input
+            class="toggle"
+            type="checkbox"
+            ${todo.done && "checked"}
+            onchange="change(${index})" />
+          <h2>
+            ${todo.done
+              ? `<s>${todo.title}</s>`
+              : todo.title}
+          </h2>
+          <p>
+            ${todo.summary.replace(/\n/g, "<br />")}
+          </p>
+        </li>
+      `).join('')}
+    </ul>
+  `
+}
+
+render(todos)
+</script>
+
+  </body>
+</html)
